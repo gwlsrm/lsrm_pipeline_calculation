@@ -1,0 +1,36 @@
+- name: ForOperation
+  var_params:
+  - name: DISTANCE
+    # train
+    values: [5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0]
+    # validaton
+    # values: [6.0, 7.5, 8.0, 12.5, 15.0, 17.5, 22.5, 25.0, 35.0, 45.0, 55.0, 65.0]
+  operations:
+    - name: SetEffMakerDistanceOperation
+      input_filename: physspec_input_hpge_nocol_barrel.json
+      output_filename: res/physspec_input.json
+      to_indent_output: true
+      distance: ${DISTANCE}
+    - name: PhysspecOperation
+      input_filename: res/physspec_input.json
+      output_filename: res/physspec_output_d${DISTANCE}.json
+      histories: 1000
+      seed: 42
+    - name: JsonToTsvOperation
+      input_filename: res/physspec_output_d${DISTANCE}.json
+      output_filename: res/physspec_output_d${DISTANCE}.tsv
+      column_names: [CalculationResults.x1, CalculationResults.y1, CalculationResults.dy1]
+    - name: JsonPrettyOperation
+      input_filename: res/physspec_output_d${DISTANCE}.json
+      output_filename: res/physspec_output_d${DISTANCE}.json
+    - name: AppspecEfficiencyInputOperation
+      input_response_filename: response_output_hpge_point.csv
+      input_physspec_filename: res/physspec_output_d${DISTANCE}.json
+      output_filename: res/appspec_input.json
+      to_indent_output: true
+    - name: AppspecOperation
+      input_filename: res/appspec_input.json
+      output_filename: appspec_output_d${DISTANCE}.tsv
+    - name: AppspecTsvOutputToEfr
+      input_filename: appspec_output_d${DISTANCE}.tsv
+      output_filename: efficiency_d${DISTANCE}.efr

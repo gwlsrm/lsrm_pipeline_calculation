@@ -1,0 +1,16 @@
+- name: ForOperation
+  var_params:
+  - name: DISTANCE
+    values: [0.0, 1.0, 5.0, 10.0, 25.0]
+  operations:
+  - name: EditInFileOperation
+    input_filename: tccfcalc_sample.in
+    output_filename: tccfcalc.in
+    edit_params:
+    - name: pdistance
+      value: ${DISTANCE}
+  - name: EffCalcOperation
+    input_filename: tccfcalc.in
+    output_filename: tccfcalc_d${DISTANCE}.out
+    histories: 100
+    seed: 42

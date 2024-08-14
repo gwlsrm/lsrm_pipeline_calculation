@@ -1,0 +1,41 @@
+- name: ForOperation
+  var_params:
+  - name: DISTANCE
+    values: [6.0, 7.5, 8.0, 12.5, 15.0, 17.5, 22.5, 25.0, 35.0, 45.0, 55.0, 65.0]
+  operations:
+    - name: LinearEfficiencyInterpolateOperation
+      input_filenames:
+        - appspec_output_d5.0.tsv
+        - appspec_output_d10.0.tsv
+        - appspec_output_d20.0.tsv
+        - appspec_output_d30.0.tsv
+        - appspec_output_d40.0.tsv
+        - appspec_output_d50.0.tsv
+        - appspec_output_d60.0.tsv
+        - appspec_output_d70.0.tsv
+      distances: [5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0]
+      target_distance: ${DISTANCE}
+      output_filename: res/efficiency_interpolated_d${DISTANCE}.tsv
+    - name: CalcMaxDiffBetweenTwoColumns
+      input_filename_1: appspec_output_d${DISTANCE}.tsv
+      input_filename_2: res/efficiency_interpolated_d${DISTANCE}.tsv
+      column_name: efficiency
+      output_filename: res/diff_${DISTANCE}.txt
+- name: MergeFilesOperation
+  input_filenames:
+    - res/diff_6.0.txt
+    - res/diff_7.5.txt
+    - res/diff_8.0.txt
+    - res/diff_12.5.txt
+    - res/diff_15.0.txt
+    - res/diff_17.5.txt
+    - res/diff_22.5.txt
+    - res/diff_25.0.txt
+    - res/diff_35.0.txt
+    - res/diff_45.0.txt
+    - res/diff_55.0.txt
+    - res/diff_65.0.txt
+  output_filename: res/diffs.txt
+  write_filename: True
+- name: PrintFileContent
+  input_filename: res/diffs.txt

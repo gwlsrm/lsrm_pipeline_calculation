@@ -1,0 +1,30 @@
+- name: ReduceTsvByValueOperation
+  input_filenames:
+    - appspec_output_d5.0.tsv
+    - appspec_output_d6.0.tsv
+    - appspec_output_d7.5.tsv
+    - appspec_output_d8.0.tsv
+    - appspec_output_d10.0.tsv
+    - appspec_output_d12.5.tsv
+    - appspec_output_d15.0.tsv
+    - appspec_output_d20.0.tsv
+    - appspec_output_d22.5.tsv
+    - appspec_output_d25.0.tsv
+    - appspec_output_d30.0.tsv
+    - appspec_output_d35.0.tsv
+    - appspec_output_d40.0.tsv
+    - appspec_output_d45.0.tsv
+    - appspec_output_d50.0.tsv
+    - appspec_output_d60.0.tsv
+    - appspec_output_d70.0.tsv
+  output_filename: efficiency_by_distance.tsv
+  new_axis_name: distance
+  new_axis_values: [5.0, 6.0, 7.5, 8.0, 10.0, 12.5, 15.0, 20.0, 22.5, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 60.0, 70.0]
+  col1value_pivot: 0.308503
+- name: PlotTsv2dOperation
+  input_filename: efficiency_by_distance.tsv
+  output_filename: res/efficiency_by_distance.png
+  x_col_name: distance
+  y_col_name: efficiency
+  x_scale_log: false
+  y_scale_log: false

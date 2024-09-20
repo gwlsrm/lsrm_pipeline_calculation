@@ -46,15 +46,15 @@ class EffPoint:
         words = line.split('=')
         if len(words) != 2:
             raise RuntimeError(
-                "Bad EffPoint format, expected energy=eff,deff,nuclide,area,darea,intense" + \
-                    f", but got {line} -- no '=' in line")
+                "Bad EffPoint format, expected energy=eff,deff,nuclide,area,darea,intense" +
+                f", but got {line} -- no '=' in line")
         energy = float(words[0])
 
         words = words[1].split(',')
         if len(words) < 6:
             raise RuntimeError(
-                "Bad EffPoint format, expected energy=eff,deff,nuclide,area,darea,intense" + \
-                    f", but got {line} -- not enough fields")
+                "Bad EffPoint format, expected energy=eff,deff,nuclide,area,darea,intense" +
+                f", but got {line} -- not enough fields")
         eff = float(words[0])
         deff = float(words[1])
         nuclide = words[2]
@@ -96,9 +96,9 @@ class EffZone:
 
     def print_zone(self, num: int) -> str:
         num += 1
-        res = f"Zone_{num}={self.degree},{self.left},{self.right}\n"
+        res = f"Zone_{num}={self.degree},{self.left},{self.right},{self.deviation}\n"
         for i, pol in enumerate(self.orth_polys_coeffs):
-            res += f"Curve_{num}_{i}="
+            res += f"Curve_{num}_{i+1}="
             res += ",".join(str(coef) for coef in pol)
             res += '\n'
         res += f"Curve_{num}=" + ",".join(str(coef) for coef in self.main_poly_coeffs) + "\n"
@@ -111,14 +111,14 @@ class EffZone:
         words = line.split('=')
         if len(words) != 2:
             raise RuntimeError(
-                "Bad Zone format, expected Zone_n=degree,left,right,deviation" + \
-                    f", but got {line} -- no '=' in line")
+                "Bad Zone format, expected Zone_n=degree,left,right,deviation" +
+                f", but got {line} -- no '=' in line")
 
         words = words[1].split(',')
         if len(words) != 4:
             raise RuntimeError(
-                "Bad Zone format, expected Zone_n=degree,left,right,deviation" + \
-                    f", but got {line} -- -- not enough fields")
+                "Bad Zone format, expected Zone_n=degree,left,right,deviation" +
+                f", but got {line} -- -- not enough fields")
 
         degree = int(words[0])
         left = float(words[1])
@@ -133,8 +133,8 @@ class EffZone:
         words = line.split('=')
         if len(words) != 2:
             raise RuntimeError(
-                "Bad Curve format, expected Curve_n[_m]=c[0],c[1],..." + \
-                    f", but got {line} -- no '=' in line")
+                "Bad Curve format, expected Curve_n[_m]=c[0],c[1],..." +
+                f", but got {line} -- no '=' in line")
 
         coeffs = [float(w) for w in words[1].split(',')]
         words = words[0].split('_')
@@ -229,8 +229,9 @@ class Efficiency:
             for p in self.points:
                 f.write(str(p) + '\n')
 
-    def save_as_efa(self, filename: str) -> None:
-        with open(filename, 'w') as f:
+    def save_as_efa(self, filename: str, is_append: bool = False) -> None:
+        mode = 'a' if is_append else 'w'
+        with open(filename, mode) as f:
             f.write(self.record_name + '\n')
             for n, v in self.header_lines:
                 f.write(n + '=' + v + '\n')
@@ -331,7 +332,7 @@ def get_eff_by_name(filename: str, record_name: str) -> tp.Optional[Efficiency]:
     get_eff_by_name parses efa-file and returns Efficiency from it by record name (line in "[]")
     """
     eff_lst = get_eff_records_from_efa(filename)
-    if record_name not in eff_list:
+    if record_name not in eff_lst:
         return None
     return get_efficiency_from_efa(filename, eff_lst[record_name])
 
@@ -363,7 +364,7 @@ def get_all_efficiencies_from_efa(filename: str) -> tp.Dict[str, Efficiency]:
     return efficiencies
 
 
-if __name__ == "__main__":
+def main():
     eff_list = get_eff_records_from_efa("test.efa")
     print("list of efficiencies:")
     for name, line_num in eff_list.items():
@@ -378,3 +379,7 @@ if __name__ == "__main__":
         print(z.degree, 10**(z.left), 10**(z.right), z.deviation)
         print(z.main_poly_coeffs)
         print(z.orth_polys_coeffs)
+
+
+if __name__ == "__main__":
+    main()

@@ -6,6 +6,7 @@ from .operation_registry import register_operation  # noqa
 from .appspec_efficiency_input_prepare_operation import AppspecEfficiencyInputOperation  # noqa
 from .appspec_operation import AppspecOperation  # noqa
 from .appspec_tsv_output_to_efr_operation import AppspecTsvOutputToEfr  # noqa
+from .auto_efficiency_calibrate_operation import AutoEfficiencyCalibrationOperation  # noqa
 from .editinfile_operation import EditInFileOperation  # noqa
 from .editjson_operation import EditJsonOperation  # noqa
 from .effcalc_operation import EffCalcOperation  # noqa

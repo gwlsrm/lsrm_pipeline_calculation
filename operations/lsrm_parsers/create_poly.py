@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from efaparser import get_efficiency_from_efa, EffZone, Efficiency
+from .efaparser import get_efficiency_from_efa, EffZone, Efficiency
 
 
 # polynomial functions

@@ -229,6 +229,13 @@ class Efficiency:
             for p in self.points:
                 f.write(str(p) + '\n')
 
+    def convert_recordname_to_efa(self) -> None:
+        tokens = self.record_name.split(';')
+        if tokens != 3:
+            return
+        self.record_name = ';'.join(tokens[0], tokens[1]+']')
+
+
     def save_as_efa(self, filename: str, is_append: bool = False) -> None:
         mode = 'a' if is_append else 'w'
         with open(filename, mode) as f:

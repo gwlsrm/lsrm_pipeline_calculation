@@ -165,6 +165,7 @@ cython_debug/
 # LSRM files
 Lib/
 projects/
+operations/lsrm_code_internal/
 appspec_input.json
 appspec_output.json
 calculation_params.json

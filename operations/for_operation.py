@@ -55,7 +55,7 @@ class ForOperation:
             assert len(names) == len(params)
             for operation_rec in section['operations']:
                 operation_rec = _update_operation_rec(operation_rec, names, params)
-                t = register_operation.registry[operation_rec['name']]
+                t = register_operation.registry[operation_rec['type']]
                 operation = t.parse_from_yaml(operation_rec, project_dir)
                 op.operations.append(operation)
         return op

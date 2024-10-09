@@ -2,9 +2,16 @@ import bisect
 import os
 import typing as tp
 
+import numpy as np
+
 from operations.operation_registry import register_operation
 
-import numpy as np
+
+# mods
+LINEAR = "linear"
+REVERSE_LINEAR = "reverse_linear"
+LINEAR_LOG = "linear_log"
+AVAILIABLE_MODS = [LINEAR, REVERSE_LINEAR, LINEAR_LOG]
 
 
 def _get_close_indices(distances: tp.List[float], target_distance: float) -> tp.Tuple[float, float]:
@@ -35,7 +42,7 @@ def _parse_tsv_output(filename: str) -> tp.Dict[str, np.ndarray]:
     return {k: np.array(v) for k, v in res.items()}
 
 
-def _load_efficiency(filename: str) -> tp.Dict[str, tp.List[float]]:
+def _load_efficiency(filename: str) -> tp.Dict[str, np.ndarray]:
     if not filename.endswith(".tsv"):
         raise RuntimeError("Unsupported file extension, please, use .tsv-files")
     return _parse_tsv_output(filename)
@@ -71,17 +78,26 @@ def _interpolate_efficiency_to_new_distance(input_filenames: tp.List[str], outpu
                                             distances: tp.List[float], target_distance: float,
                                             mode: str):
     li, ri = _get_close_indices(distances, target_distance)
-    if mode == "linear":
+    if mode == LINEAR:
         interpol = LinearInterpol(distances[li], distances[ri], target_distance)
-    elif mode == "reverse_linear":
+    elif mode == REVERSE_LINEAR:
         interpol = LinearInterpol(1/distances[li], 1/distances[ri], 1/target_distance)
+    elif mode == LINEAR_LOG:
+        interpol = LinearInterpol(distances[li], distances[ri], target_distance)
     left_efficiency = _load_efficiency(input_filenames[li])
     right_efficiency = _load_efficiency(input_filenames[ri])
 
     res = {}
-    for key, lvalues in left_efficiency.items():
-        rvalues = right_efficiency[key]
-        res[key] = interpol(lvalues, rvalues)
+    for column_name, lvalues in left_efficiency.items():
+        rvalues = right_efficiency[column_name]
+        if mode == LINEAR_LOG and column_name == "efficiency":
+            lvalues = np.log10(lvalues)
+            rvalues = np.log10(rvalues)
+
+        r = interpol(lvalues, rvalues)
+        if mode == LINEAR_LOG and column_name == "efficiency":
+            r = 10**r
+        res[column_name] = r
 
     _save_efficiency(res, output_filename)
 
@@ -96,7 +112,7 @@ class LinearEfficiencyInterpolateOperation:
         self.distances: tp.List[float] = []
         self.output_filename = ""
         self.target_distance = 0.0
-        self.mode: str = "linear"
+        self.mode: str = LINEAR
 
     @staticmethod
     def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> (
@@ -111,6 +127,7 @@ class LinearEfficiencyInterpolateOperation:
         assert len(op.input_filenames) == len(op.distances)
         assert len(op.distances) > 1, "nothing to interpolate"
         op.mode = section.get("mode", op.mode)
+        assert op.mode in AVAILIABLE_MODS
         return op
 
     def run(self) -> None:

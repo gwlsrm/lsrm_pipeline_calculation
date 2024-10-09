@@ -26,3 +26,4 @@ from .plot_tsv_2d_operation import PlotTsv2dOperation  # noqa
 from .print_file_operation import PrintFileContent  # noqa
 from .reduce_tsv_by_value_operation import ReduceTsvByValueOperation  # noqa
 from .set_effmaker_distance_operation import SetEffMakerDistanceOperation  # noqa
+from .tsv_reduce_function_operations import TsvReduceFunctionOperation  # noqa

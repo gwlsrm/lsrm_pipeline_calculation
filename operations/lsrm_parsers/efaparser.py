@@ -229,16 +229,24 @@ class Efficiency:
             for p in self.points:
                 f.write(str(p) + '\n')
 
-    def convert_recordname_to_efa(self) -> None:
+    def convert_records_to_efa(self) -> None:
+        # record name
         tokens = self.record_name.split(';')
-        if tokens != 3:
+        if len(tokens) != 3:
             return
-        self.record_name = ';'.join(tokens[0], tokens[1]+']')
+        assert len(tokens) == 3
+        self.record_name = ';'.join([tokens[0], tokens[1]+']'])
+        # headers
+        nuclide = tokens[2][:-1]
+        self.header_lines = [(n, v) for n, v in self.header_lines if n != nuclide]
 
 
     def save_as_efa(self, filename: str, is_append: bool = False) -> None:
+        self.convert_records_to_efa()
         mode = 'a' if is_append else 'w'
         with open(filename, mode) as f:
+            if mode == 'a':
+                f.write('\n')
             f.write(self.record_name + '\n')
             for n, v in self.header_lines:
                 f.write(n + '=' + v + '\n')

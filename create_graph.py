@@ -21,7 +21,7 @@ def parse_config(filename: str) -> Graph:
         docs = yaml.safe_load(f)
         operations = []
         for operation_rec in docs:
-            t = register_operation.registry[operation_rec['name']]
+            t = register_operation.registry[operation_rec['type']]
             operation = t.parse_from_yaml(operation_rec, project_dir)
             operations.append(operation)
     graph = Graph(operations)

@@ -5,6 +5,9 @@
   - name: IS_APPEND
     values: [false, true, true, true, true, true, true, true]
   operations:
+    - type: EfrAddParametersOperation
+      input_filename: res/efficiency_d${DISTANCE}.efr
+      parameters: {distance_error: 0.8}
     - type: AutoEfficiencyCalibrationOperation
       input_filename: res/efficiency_d${DISTANCE}.efr
       output_filename: efficiency.efa

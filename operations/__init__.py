@@ -13,6 +13,7 @@ except ImportError as e:
 from .editinfile_operation import EditInFileOperation  # noqa
 from .editjson_operation import EditJsonOperation  # noqa
 from .effcalc_operation import EffCalcOperation  # noqa
+from .efr_add_params_operation import EfrAddParametersOperation  # noqa
 from .efr_to_tsv_operation import EfrToTsvOperation  # noqa
 from .for_operation import ForOperation  # noqa
 from .interpolate_efficiency_operation import LinearEfficiencyInterpolateOperation  # noqa

@@ -34,6 +34,7 @@
       output_filename: res/efficiency_d${DISTANCE}.efr
       physspec_input_filename: res/physspec_input.json
       distance: ${DISTANCE}
+      other_params: {PointOfMeasurement: '{"Position":[{"X":0},{"Y":${DISTANCE}},{"Z":0}],"Side":"","Name":""}'}
 - type: ForOperation
   var_params:
   - name: DISTANCE
@@ -70,3 +71,4 @@
       output_filename: res/efficiency_d${DISTANCE}.efr
       physspec_input_filename: res/physspec_input.json
       distance: ${DISTANCE}
+      other_params: {PointOfMeasurement: '{"Position":[{"X":0},{"Y":${DISTANCE}},{"Z":0}],"Side":"","Name":""}'}

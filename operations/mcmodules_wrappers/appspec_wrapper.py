@@ -54,7 +54,8 @@ class AppspecDllWrapper:
             ['reset_efficiency_calculation@0', 'reset_efficiency_calculation']
         )
         # calculate efficiency using json-files
-        self._calculate_efficiency_json = _get_attribute(self._lib, ['calculate_efficiency_json'])
+        self._calculate_efficiency_json = _get_attribute(self._lib, ['calculate_efficiency_json',
+                                                                     'calculate_efficiency_json@12'])
         self._calculate_efficiency_json.argtypes = [
             ct.c_char_p, ct.c_char_p, ct.c_bool]
         self._calculate_efficiency_json.restype = ct.c_int

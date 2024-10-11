@@ -99,6 +99,7 @@ def _get_det_geom_params_from_physspec_input(
 def _save_to_efr(eff_result: tp.Dict[str, tp.List[float]],
                  detector_name: str, geometry: str, distance: tp.Optional[float],
                  volume: tp.Optional[float], material: str, density: tp.Optional[float],
+                 other_params: tp.Dict[str, tp.Any],
                  output_filename: str):
     with open(output_filename, 'w') as f:
         # header
@@ -111,6 +112,8 @@ def _save_to_efr(eff_result: tp.Dict[str, tp.List[float]],
         f.write("Thick,mm=0\n")
         f.write("DThick,mm=0\n")
         f.write(f"Distance,cm={distance}\n")
+        for k, v in other_params.items():
+            f.write(f"{k}={v}\n")
         f.write("CorrectionFile=\n")
         f.write("Nuclide=100,1,1\n")
         # efficiency data
@@ -140,6 +143,7 @@ class AppspecTsvOutputToEfr:
         self.volume = None
         self.material = None
         self.density = None
+        self.other_params = {}
 
     @staticmethod
     def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'AppspecTsvOutputToEfr':
@@ -153,6 +157,7 @@ class AppspecTsvOutputToEfr:
         op.volume = section.get("volume", op.volume)
         op.material = section.get("material", op.material)
         op.density = section.get("density", op.density)
+        op.other_params = section.get("other_params", op.other_params)
         return op
 
     def run(self) -> None:
@@ -169,5 +174,5 @@ class AppspecTsvOutputToEfr:
 
         _save_to_efr(eff_result,
                      self.detector_name, self.geometry_name, self.distance, self.volume,
-                     self.material, self.density,
+                     self.material, self.density, self.other_params,
                      self.output_filename)

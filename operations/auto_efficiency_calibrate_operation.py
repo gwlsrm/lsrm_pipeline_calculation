@@ -4,19 +4,20 @@ import typing as tp
 from operations.operation_registry import register_operation
 
 from .lsrm_parsers import efaparser
-from .lsrm_code_internal import orth_poly_lsrm
+from .sl_wrappers import efficiency_calibration as ec
 
 
 @register_operation
 class AutoEfficiencyCalibrationOperation:
     """
     AutoEfficiencyCalibrationOperation make auto efficiency for efr-file and
-        saves approximation to efa-file
+        saves approximation to efa-file.
+    It needs liborthogonal_polynomials.so for work
     """
     def __init__(self):
         self.input_filename = ""
         self.output_filename = ""
-        self.zones_config = orth_poly_lsrm.DEFAULT_ZONES_CONFIG
+        self.zones_config = ec.DEFAULT_ZONES_CONFIG
         self.is_append = False
 
     @staticmethod
@@ -31,7 +32,7 @@ class AutoEfficiencyCalibrationOperation:
             zones = section["zone_config"]
             for z in zones:
                 op.zones_config.append(
-                    orth_poly_lsrm.ZoneConfig(z["degree"], z["left"], z["right"])
+                    ec.ZoneConfig(z["degree"], z["left"], z["right"])
                 )
         assert len(op.zones_config) > 0
         op.is_append = section.get("is_append", op.is_append)
@@ -40,5 +41,5 @@ class AutoEfficiencyCalibrationOperation:
     def run(self) -> None:
         print('start auto_efficiency_calibration')
         efr = efaparser.get_efficiency_from_efa(self.input_filename)
-        efa = orth_poly_lsrm.approx_efr_with_polynomes(efr, self.zones_config)
+        efa = ec.approx_efr_with_polynomes(efr, self.zones_config)
         efa.save_as_efa(self.output_filename, self.is_append)

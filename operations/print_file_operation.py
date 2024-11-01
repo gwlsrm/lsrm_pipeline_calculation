@@ -7,7 +7,7 @@ from operations.operation_registry import register_operation
 @register_operation
 class PrintFileContent:
     """
-    PrintFileContent prints file content
+    PrintFileContent prints file content to cout
     """
     def __init__(self):
         self.input_filename: str = ""

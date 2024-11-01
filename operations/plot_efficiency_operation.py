@@ -11,7 +11,7 @@ from .lsrm_parsers import efaparser
 @register_operation
 class PlotEfficiencyOperation:
     """
-    PlotEfficiencyOperation plots efficiency from efa or efr file and saves it to image file
+    PlotEfficiencyOperation plots efficiency from efa or efr file and saves it to the image file
     """
     def __init__(self):
         self.input_filename = ""

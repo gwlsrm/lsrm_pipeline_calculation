@@ -44,6 +44,12 @@ def _calc_max_diff(input_filename_1: str, input_filename_2: str, column_name: st
 class CalcMaxDiffBetweenTwoColumns:
     """
     CalcMaxDiffBetweenTwoColumns calculates max diff between 2 columns in 2 tsv-files
+    parameters:
+        - input_filename_*: input tsv-file
+        - column_name: column name in both files, values must be numerical
+        - output_filename: output filename, where there will be maximum difference (one number)
+        - is_relative_diff: relative difference to average of two values
+            (if relative_to_average is set) or to the first value
     """
     def __init__(self):
         self.input_filename_1: str = ""

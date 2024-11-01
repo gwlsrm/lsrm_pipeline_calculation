@@ -10,9 +10,14 @@ from .sl_wrappers import efficiency_calibration as ec
 @register_operation
 class AutoEfficiencyCalibrationOperation:
     """
-    AutoEfficiencyCalibrationOperation make auto efficiency for efr-file and
+    AutoEfficiencyCalibrationOperation make auto efficiency calibration for efr-file and
         saves approximation to efa-file.
     It needs liborthogonal_polynomials.so for work
+    parameters:
+        - input_filename: input efr file
+        - output_filename: desirable name of the output efa filename
+        - zones_config: list with zone to create: [{degree: 3, left: 50, right: 300}, ...]
+        - is_append: append new efficiency section to file or create new one
     """
     def __init__(self):
         self.input_filename = ""

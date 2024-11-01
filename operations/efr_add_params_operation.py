@@ -19,7 +19,7 @@ def _save_output(eff: efaparser.Efficiency, output_filename: str):
 @register_operation
 class EfrAddParametersOperation:
     """
-    EfrAddParametersOperation converts efr-file to tsv-file (like appspec output)
+    EfrAddParametersOperation adds new parameter to the efr(efa) header
     """
     def __init__(self):
         self.input_filename = ""

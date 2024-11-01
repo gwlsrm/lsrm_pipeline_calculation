@@ -42,7 +42,14 @@ def _reduce_tsv_by_value(input_filenames: tp.List[str], output_filename: str,
 @register_operation
 class ReduceTsvByValueOperation:
     """
-    ReduceTsvByValueOperation reduce bunch of tsv by value
+    ReduceTsvByValueOperation reduce bunch of tsv by value.
+    It will take only one line from each file and create new table with new columns (axis)
+    parameters:
+        input_filenames: input filenames with the similar content to reduce
+        output_filename: filename with results
+        new_axis_name: new column in result tsv-file
+        new_axis_values: value for each input filename, which it correcponds
+        col1value_pivot: value in 1st column to select line
     """
     def __init__(self):
         self.input_filenames = []

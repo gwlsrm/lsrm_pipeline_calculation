@@ -8,8 +8,7 @@ from .lsrm_parsers import efaparser
 EPS = 1e-15
 
 
-def _parse_efr_output(input_filename: str, section_name: str
-                      ) -> tp.List[efaparser.EffPoint]:
+def _parse_efr_output(input_filename: str) -> tp.List[efaparser.EffPoint]:
     eff = efaparser.get_efficiency_from_efa(input_filename)
     return eff.points
 
@@ -41,18 +40,16 @@ class EfrToTsvOperation:
     def __init__(self):
         self.input_filename = ""
         self.output_filename = ""
-        self.section_name = ""
 
     @staticmethod
     def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'EfrToTsvOperation':
         op = EfrToTsvOperation()
         op.input_filename = os.path.join(project_dir, section['input_filename'])
         op.output_filename = os.path.join(project_dir, section['output_filename'])
-        op.section_name = section.get("section_name", op.section_name)
         return op
 
     def run(self) -> None:
         print('start efr_to_tsv')
-        eff_points = _parse_efr_output(self.input_filename, self.section_name)
+        eff_points = _parse_efr_output(self.input_filename)
 
         _save_to_tsv(eff_points, self.output_filename)

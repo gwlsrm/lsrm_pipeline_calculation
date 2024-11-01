@@ -106,6 +106,13 @@ def _interpolate_efficiency_to_new_distance(input_filenames: tp.List[str], outpu
 class LinearEfficiencyInterpolateOperation:
     """
     LinearEfficiencyInterpolateOperation linear interpolates efficiencies by distance
+    parameters:
+        - input_filenames: list with tsv-filenames with efficiencies
+        - distances: list of distances
+        - output_filename: desirable name of output tsv-file (with efficiencies)
+            for distance = target_distance
+        - target_distance: target distance to calculate interpolated value
+        - mode: type of interpolation: linear, reverse_linear, linear_log
     """
     def __init__(self):
         self.input_filenames: tp.List[str] = []

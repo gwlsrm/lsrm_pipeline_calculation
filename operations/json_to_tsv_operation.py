@@ -49,8 +49,8 @@ def _convert_json_to_tsv(infile_name: str, outfile_name: str, column_names: tp.L
 @register_operation
 class JsonToTsvOperation:
     """
-    JsonToTsvOperation constructs tsv-file from json and fields. fields'll become column names.
-    Fieds must be in format: token1.token2
+    JsonToTsvOperation constructs tsv-file from json and fields, fields become column names.
+    Fields must be in format: token1.token2 <- json keys
     """
     def __init__(self):
         self.input_filename = ""

@@ -42,6 +42,10 @@ def _make_iterable(var_params_rec: tp.List[tp.Dict[str, tp.Any]]):
 class ForOperation:
     """
     ForOperation -- special operation: creates N branches for graph in params
+    parameters:
+        - var_params: list of parameters for ForOperation: [name: param_name, values: [v1, v2, ...]]
+        - operations: list of operations, they can contain $param_name,
+            new param value will be set for each for iteration
     """
     def __init__(self):
         self.operations: tp.List[Operation] = []

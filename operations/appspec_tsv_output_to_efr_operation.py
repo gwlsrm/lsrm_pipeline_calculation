@@ -132,6 +132,10 @@ def _save_to_efr(eff_result: tp.Dict[str, tp.List[float]],
 class AppspecTsvOutputToEfr:
     """
     AppspecTsvOutputToEfr converts appspec output tsv-file to efr-file
+    All needed information like detector_name, geometry_name, volume, material, rho
+    it can take from physspec_input_filename or you can pass them directly in operation parameters.
+    distance can be set only directly through operation parameters
+    Also you can any other prams in form {param_name: param_value, ...}
     """
     def __init__(self):
         self.input_filename = ""

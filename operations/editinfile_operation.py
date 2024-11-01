@@ -21,6 +21,10 @@ def _edit_infile(infile_name: str, outfile_name: str, params: tp.Dict[str, tp.An
 class EditInFileOperation:
     """
     EditInFileOperation edits in-files for tccfcalc calculation
+    parameters:
+        - input_filename: input in-file for tccfcalc calculation
+        - output_filename: desirable output in-file name, must differ from input_filename
+        - edit_params: list with name and value: [{name: param_name, value: param_value}, ...]
     """
     def __init__(self):
         self.input_filename = ""

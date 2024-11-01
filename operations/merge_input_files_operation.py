@@ -21,6 +21,12 @@ def _merge_files(input_filenames: tp.List[str], output_filename: str, write_file
 class MergeFilesOperation:
     """
     MergeFilesOperation merge all text files to one
+    parameters:
+        input_filenames: list of text filenames to merge
+        output_filename: desirable output filename
+        write_filename: will add filename: filename\tfilecontent
+        write_header: will write header: "filename\tfilecontent\n",
+            it's useful if inputfiles have only one line
     """
     def __init__(self):
         self.input_filenames: tp.List[str] = []

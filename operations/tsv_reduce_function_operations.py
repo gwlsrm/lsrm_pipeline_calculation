@@ -41,7 +41,13 @@ def _tsv_reduce_with_function(input_filename: str, output_filename: str, column_
 @register_operation
 class TsvReduceFunctionOperation:
     """
-    TsvReduceFunctionOperation reduce bunch of tsv by value
+    TsvReduceFunctionOperation reduce bunch of tsv by function: min/max.
+    It takes only one line from input file and write it to output
+    parameters:
+        - input_filename: input tsv-filename
+        - output_filename: output tsv filename
+        - column_name: column name, where to calculate function
+        - function: function to select line: min, max
     """
     def __init__(self):
         self.input_filename = ""

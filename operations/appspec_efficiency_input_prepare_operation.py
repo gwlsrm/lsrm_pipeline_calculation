@@ -67,7 +67,12 @@ def _write_appspec_input_file(
 @register_operation
 class AppspecEfficiencyInputOperation:
     """
-    AppspecEfficiencyInputOperation edits json-files used for calculation modules
+    AppspecEfficiencyInputOperation creates input file for appspec efficiency calculation
+    parameters:
+        - input_response_filename: output csv-file from response calculation
+        - input_physspec_filename: output json-file from physspec calculation
+        - output_filename: desirable input filename for appspec calculation
+        - to_indent_output: add spaces and CR to json or create one-line json
     """
     def __init__(self):
         self.input_response_filename = ""

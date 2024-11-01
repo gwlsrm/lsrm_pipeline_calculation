@@ -29,6 +29,11 @@ def _edit_jsonfile(infile_name: str, outfile_name: str, params: tp.Dict[str, tp.
 class EditJsonOperation:
     """
     EditJsonOperation edits json-files used for calculation modules
+    parameters:
+        - input_filename: input json-filename
+        - output_filename: desirable output json-filename, can be same as input_filename
+        - edit_params: list of parameters to change: [{name: par_name, value: par_value}, ...]
+        - to_indent_output: use spaces and CR in output file or create one-line json
     """
     def __init__(self):
         self.input_filename = ""

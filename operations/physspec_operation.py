@@ -9,7 +9,7 @@ from .mcmodules_wrappers.physspec import calc_physspec
 @register_operation
 class PhysspecOperation:
     """
-    PhysspecOperation calculates physical spectrum using physspec.dll
+    PhysspecOperation calculates physical spectrum using physspec.dll (physspec.so)
     """
     def __init__(self):
         self.input_filename = "physspec_input.json"

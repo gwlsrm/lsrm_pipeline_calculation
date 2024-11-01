@@ -9,7 +9,12 @@ from .mcmodules_wrappers.appspec import calc_efficiency
 @register_operation
 class AppspecOperation:
     """
-    AppspecOperation calculates efficiency from physspec using appspec.dll
+    AppspecOperation calculates efficiency from physspec using appspec.dll(.so)
+    parameters:
+        - input_filename: input filename for calculation
+            (use AppspecEfficiencyInputOperation to create it)
+        - output_filename: desirable output filename
+        - is_log: use log for approximation
     """
     def __init__(self):
         self.input_filename = "appspec_input.json"

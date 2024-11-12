@@ -7,7 +7,9 @@ from .tccfcalc_wrapper import TccFcalcDllWrapper, get_prepare_error_message
 from .nuclide import Nuclide
 
 
-def calculate_eff(nuclide: Nuclide, N: int, is_calc_spectrum: bool, seed: int, activity: float):
+def calculate_eff(nuclide: Nuclide, N_thsnds: int, is_calc_spectrum: bool, seed: int,
+                  activity: float, batch_size: int = 1000):
+    assert N_thsnds*1000 % batch_size == 0, "batch_size must divide N"
     # prepare
     cur_path = os.getcwd()
     cur_lib_path = os.path.join(cur_path, 'Lib')
@@ -20,11 +22,12 @@ def calculate_eff(nuclide: Nuclide, N: int, is_calc_spectrum: bool, seed: int, a
     logging.info('Prepared successfully')
 
     # calculate
-    logging.info(f'Starting calculation with N = {N}')
+    logging.info(f'Starting calculation with N = {N_thsnds} thsnds')
     percent = 0
-    for i in range(N):
-        lib.tccfcalc_calculate(1000)
-        new_percent = int(10 * i / N)
+    steps = N_thsnds * 1000 // batch_size
+    for i in range(steps):
+        lib.tccfcalc_calculate(batch_size)
+        new_percent = int(10 * i / steps)
         if percent != new_percent:
             percent = new_percent
             logging.debug(f'{percent*10}%')
@@ -39,7 +42,8 @@ def calculate_eff(nuclide: Nuclide, N: int, is_calc_spectrum: bool, seed: int, a
         logging.info('Spectrum calculation done')
 
 
-def calculate_eff_json(N: int, is_calc_spectrum: bool, seed: int, activity: float):
+def calculate_eff_json(N_thsnds: int, is_calc_spectrum: bool, seed: int, activity: float,
+                       batch_size: int = 1000):
     # prepare
     cur_path = os.getcwd()
     input_filename = os.path.join(cur_path, 'tccfcalc_input.json')
@@ -52,11 +56,13 @@ def calculate_eff_json(N: int, is_calc_spectrum: bool, seed: int, activity: floa
     logging.info('Prepared successfully')
 
     # calculate
-    logging.info(f'Starting calculation with N = {N}')
+    logging.info(f'Starting calculation with N = {N_thsnds} thsnds')
     percent = 0
-    for i in range(N):
-        lib.tccfcalc_calculate(1000)
-        new_percent = int(10 * i / N)
+    steps = N_thsnds * 1000 // batch_size
+    steps = N // batch_size
+    for i in range(steps):
+        lib.tccfcalc_calculate(batch_size)
+        new_percent = int(10 * i / steps)
         if percent != new_percent:
             percent = new_percent
             logging.debug(f'{percent*10}%')

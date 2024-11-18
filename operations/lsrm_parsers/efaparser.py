@@ -240,6 +240,15 @@ class Efficiency:
         nuclide = tokens[2][:-1]
         self.header_lines = [(n, v) for n, v in self.header_lines if n != nuclide]
 
+    def convert_records_to_efr(self, nuclide: str) -> None:
+        # record name
+        tokens = self.record_name.split(';')
+        if len(tokens) == 3:
+            return
+        assert len(tokens) == 2
+        self.record_name = self.record_name[:-1] + ";" + nuclide + "]"
+        # headers
+        self.header_lines.append((nuclide, "100,1,1"))
 
     def save_as_efa(self, filename: str, is_append: bool = False) -> None:
         self.convert_records_to_efa()

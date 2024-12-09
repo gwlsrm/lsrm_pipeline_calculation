@@ -7,6 +7,7 @@ from .appspec_efficiency_input_prepare_operation import AppspecEfficiencyInputOp
 from .appspec_operation import AppspecOperation  # noqa
 from .appspec_tsv_output_to_efr_operation import AppspecTsvOutputToEfr  # noqa
 from .auto_efficiency_calibrate_operation import AutoEfficiencyCalibrationOperation  # noqa
+from .detector_init_characterisation_operation import DetectorInitCharacterisationOperation  # noqa
 from .editinfile_operation import EditInFileOperation  # noqa
 from .editjson_operation import EditJsonOperation  # noqa
 from .effcalc_operation import EffCalcOperation  # noqa
@@ -28,4 +29,5 @@ from .reduce_tsv_by_value_operation import ReduceTsvByValueOperation  # noqa
 from .set_effmaker_distance_operation import SetEffMakerDistanceOperation  # noqa
 from .tsv_create_from_list_operation import TsvCreateFromList  # noqa
 from .tsv_join_by_one_column_tccfcalc_operation import TsvOneColumnJoinOperation  # noqa
+from .tsv_rename_columns_operation import TsvRenameColumnsOperation  # noqa
 from .tsv_reduce_function_operations import TsvReduceFunctionOperation  # noqa

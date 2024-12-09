@@ -64,6 +64,7 @@ class EfrFromEfaOperation:
         op = EfrFromEfaOperation()
         op.input_filename = os.path.join(project_dir, section['input_filename'])
         op.output_filename = os.path.join(project_dir, section['output_filename'])
+        op.section_name = section.get("section_name", op.section_name)
         op.energy_points = section.get("energy_points")
         if not op.energy_points:
             energy_grid = section.get("energy_grid")

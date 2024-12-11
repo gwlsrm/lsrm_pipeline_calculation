@@ -8,7 +8,7 @@ from .common_parsers.tsv_parser import parse_tsv_to_float_cols
 
 
 DETECTOR_TYPE_TO_PARAM_NAMES = {
-    "COAXIAL": ["DC_CrystalDiameter", "DC_CrystalHeight", "DC_CrystalFrontDeadLayer"]
+    "COAXIAL": ["DC_CrystalDiameter", "DC_CrystalHeight", "DC_CrystalFrontDeadLayer", "DC_CrystalSideDeadLayer"]
 }
 
 
@@ -39,9 +39,11 @@ def _minimize_det_parameters(tsv_filename: str, matrix_file: str, infile: str, d
     b = a[1:, :]
     x_hat, _, _, _ = np.linalg.lstsq(b.T, y, rcond=None)
     d = np.exp(x_hat[0])
-    h = np.mean([x_hat[1]**2, x_hat[2]])
-    dl = x_hat[3]
-    return [d, h, dl]
+    h = x_hat[1]**2
+    dl = x_hat[2]
+    d += 2*dl
+    h += dl
+    return [d, h, dl, dl]
 
 
 @register_operation

@@ -15,6 +15,7 @@ from .effcalc_out_to_tsv_operation import EffCalcOutToTsvOperation  # noqa
 from .efr_add_params_operation import EfrAddParametersOperation  # noqa
 from .efr_from_efa_operation import EfrFromEfaOperation  # noqa
 from .efr_to_tsv_operation import EfrToTsvOperation  # noqa
+from .for_files_operation import ForFilesOperation  # noqa
 from .for_operation import ForOperation  # noqa
 from .interpolate_efficiency_operation import LinearEfficiencyInterpolateOperation  # noqa
 from .json_pretty_operation import JsonPrettyOperation  # noqa
@@ -27,6 +28,7 @@ from .plot_tsv_2d_operation import PlotTsv2dOperation  # noqa
 from .print_file_operation import PrintFileContent  # noqa
 from .reduce_tsv_by_value_operation import ReduceTsvByValueOperation  # noqa
 from .set_effmaker_distance_operation import SetEffMakerDistanceOperation  # noqa
+from .spe2txt_converter_operation import Spe2TxtOperation  # noqa
 from .tsv_create_from_list_operation import TsvCreateFromList  # noqa
 from .tsv_join_by_one_column_tccfcalc_operation import TsvOneColumnJoinOperation  # noqa
 from .tsv_rename_columns_operation import TsvRenameColumnsOperation  # noqa

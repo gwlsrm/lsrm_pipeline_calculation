@@ -1,3 +1,4 @@
+import json
 import os
 import typing as tp
 
@@ -17,6 +18,12 @@ def _load_eff_from_tsv(filename: str) -> tp.Optional[tp.List[float]]:
     return values.get("efficiency") or values.get("Eff")
 
 
+def _load_coeffs(filename: str) -> np.ndarray:
+    with open(filename) as f:
+        a = json.load(f)
+    return np.array(a)
+
+
 def _edit_infile(infile_name: str, outfile_name: str, params: tp.Dict[str, tp.Any]):
     with open(infile_name, 'r') as f, open(outfile_name, 'w') as g:
         for line in f:
@@ -26,7 +33,7 @@ def _edit_infile(infile_name: str, outfile_name: str, params: tp.Dict[str, tp.An
                 continue
             key, _ = [w.strip() for w in line.split('=', maxsplit=1)]
             if key in params:
-                line = f'{key} = {params[key]}'
+                line = f'{key} = {params[key]:.5f}'
             g.write(line + '\n')
 
 
@@ -34,7 +41,7 @@ def _minimize_det_parameters(tsv_filename: str, matrix_file: str, infile: str, d
                              ) -> tp.List[float]:
     eff = _load_eff_from_tsv(tsv_filename)
     assert eff
-    a = np.load(matrix_file)
+    a = _load_coeffs(matrix_file)
     y = np.log(eff) - a[0, :]
     b = a[1:, :]
     x_hat, _, _, _ = np.linalg.lstsq(b.T, y, rcond=None)
@@ -55,9 +62,10 @@ class DetectorInitCharacterisationOperation:
     parameters:
         - input_in_filename: with initial detector params values
         - input_tsv_filename: input tsv-file with efficiency
-        - input_matrix_file: input npy-file with precalculated coefficients for characterisation
+        - input_matrix_file: input json-file with precalculated coefficients for characterisation
         - output_filename: desirable output in-file name with fitted detector diameter, height
             and frontal thick
+        - detector_type: COAXIAL, SCINTIL
     """
     def __init__(self):
         self.input_in_filename = ""

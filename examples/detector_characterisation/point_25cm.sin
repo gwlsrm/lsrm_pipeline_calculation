@@ -1,0 +1,14 @@
+//---------------------------------
+//SOURCE PARAMETERS BLOCK:
+//---------------------------------
+//Source types: POINT, CYLINDER, MARINELLI
+
+SourceType = POINT
+
+//Point source
+pdistance = 25.0
+
+// calculation parameters
+calc_spectrum = false
+calc_coincidence = false
+threads_number = -1

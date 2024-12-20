@@ -1,0 +1,4 @@
+// calculation parameters
+calc_spectrum = false
+calc_coincidence = false
+threads_number = -1

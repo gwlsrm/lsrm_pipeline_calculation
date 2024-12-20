@@ -1,0 +1,47 @@
+# convert to tsv
+- type: EfrFromEfaOperation
+  input_filename: GEM15P4.efa
+  section_name: "[GEM15P4-70 #51-TP32799B;Point-25cm-1]"
+  output_filename: res/tmp.efr
+  energy_grid: {start: 50, end: 2000, points: 10, is_log: true}
+- type: EfrToTsvOperation
+  input_filename: res/tmp.efr
+  output_filename: res/GEM15P4_point25cm.tsv
+
+# run characterisation
+- type: DetectorInitCharacterisationOperation
+  input_in_filename: Gem15P4-70_def.din
+  input_tsv_filename: res/GEM15P4_point25cm.tsv
+  input_matrix_file: coeffs_coaxial_ge_25cm.json
+  output_filename: res/Gem15P4-70_optimized.din
+  detector_type: COAXIAL
+
+# run calc with new params
+- type: MergeFilesOperation
+  input_filenames:
+    - res/Gem15P4-70_optimized.din
+    - point_25cm.sin
+    - calculation_parameters.in
+  output_filename: res/tccfcalc_optimized.in
+  write_eol_between_files: true
+- type: EffCalcOperation
+  input_filename: res/tccfcalc_optimized.in
+  output_filename: res/tccfcalc_optimized.out
+  histories: 40000 # 10000
+- type: EffCalcOutToTsvOperation
+  input_filename: res/tccfcalc_optimized.out
+  output_filename: res/tccfcalc_optimized.tsv
+
+# compate efficiencies and print results
+- type: TsvRenameColumnsOperation
+  input_filename: res/GEM15P4_point25cm.tsv
+  output_filename: res/GEM15P4_point25cm_renamed.tsv
+  columns_from: [efficiency, defficiency]
+  columns_to: [Eff, "dEff(%)"]
+- type: CalcMaxDiffBetweenTwoColumns
+  input_filename_1: res/GEM15P4_point25cm_renamed.tsv
+  input_filename_2: res/tccfcalc_optimized.tsv
+  column_name: Eff
+  output_filename: res/diff.txt
+- type: PrintFileContent
+  input_filename: res/diff.txt

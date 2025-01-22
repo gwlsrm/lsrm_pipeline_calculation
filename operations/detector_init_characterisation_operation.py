@@ -9,7 +9,8 @@ from .common_parsers.tsv_parser import parse_tsv_to_float_cols
 
 
 DETECTOR_TYPE_TO_PARAM_NAMES = {
-    "COAXIAL": ["DC_CrystalDiameter", "DC_CrystalHeight", "DC_CrystalFrontDeadLayer", "DC_CrystalSideDeadLayer"]
+    "COAXIAL": ["DC_CrystalDiameter", "DC_CrystalHeight", "DC_CrystalFrontDeadLayer", "DC_CrystalSideDeadLayer"],
+    "SCINTIL": ["DS_CrystalDiameter", "DS_CrystalHeight"],
 }
 
 
@@ -42,15 +43,22 @@ def _minimize_det_parameters(tsv_filename: str, matrix_file: str, infile: str, d
     eff = _load_eff_from_tsv(tsv_filename)
     assert eff
     a = _load_coeffs(matrix_file)
-    y = np.log(eff) - a[0, :]
-    b = a[1:, :]
+    y = np.log(eff) - a[0, :]  # substract bias
+    b = a[1:, :]  # coeffs wo bias
     x_hat, _, _, _ = np.linalg.lstsq(b.T, y, rcond=None)
     d = np.exp(x_hat[0])
     h = x_hat[1]**2
-    dl = x_hat[2]
-    d += 2*dl
-    h += dl
-    return [d, h, dl, dl]
+    if detector_type == "COAXIAL":
+        dl = x_hat[2]
+        d += 2*dl
+        h += dl
+        dl = max(dl, 0)
+        output_params = [d, h, dl, dl]
+    elif detector_type == "SCINTIL":
+        output_params = [d, h]
+    else:
+        raise RuntimeError(f"Unknown detector type: {detector_type}")
+    return output_params
 
 
 @register_operation

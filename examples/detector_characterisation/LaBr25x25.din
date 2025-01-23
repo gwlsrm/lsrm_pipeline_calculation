@@ -1,0 +1,100 @@
+//---------------------------------
+//DETECTOR PARAMETERS BLOCK:
+//---------------------------------
+//Detector types: COAXIAL, SCINTILLATOR
+
+
+DetectorType = SCINTILLATOR
+
+// Scintillator detector
+DS_CrystalDiameter = 2.5 cm
+DS_CrystalHeight = 2.5 cm
+DS_CrystalFrontReflectorThickness = 0.05 cm
+DS_CrystalSideReflectorThickness = 0.05 cm
+DS_CrystalFrontCladdingThickness = 0.1 cm
+DS_CrystalSideCladdingThickness = 0.1 cm
+DS_DetectorFrontPackagingThickness = 0.7 cm
+DS_DetectorSidePackagingThickness = 0.7 cm
+DS_DetectorFrontCapThickness = 0.15 cm
+DS_DetectorSideCapThickness = 0.15 cm
+DS_DetectorMountingThickness = 0.8 cm
+
+
+//---------------------------------
+//MATERIAL PARAMETERS BLOCK:
+//---------------------------------
+// Scintillation detector materials:
+//---------------------------
+
+
+// Crystal
+DS_nCrystalElements = 2
+DS_RoCrystal = 5.06
+DS_ZCrystal[0] = 57
+DS_FractionsCrystal[0] = 0.366866343380559
+DS_ZCrystal[1] = 35
+DS_FractionsCrystal[1] = 0.633133656619442
+DS_FractionTypeCrystal = MASS
+M_DS_Crystal.MName = LaBr3
+M_DS_Crystal.Nmaterials = 1
+M_DS_Crystal.Name[0] = LaBr3
+M_DS_Crystal.MatRelWeight[0] = 1
+
+
+// Crystal Cladding
+DS_nCrystalCladdingElements = 1
+DS_RoCrystalCladding = 2.7
+DS_ZCrystalCladding[0] = 13
+DS_FractionsCrystalCladding[0] = 1
+DS_FractionTypeCrystalCladding = MASS
+M_DS_Crystal_Cladding.MName = Aluminium
+M_DS_Crystal_Cladding.Nmaterials = 1
+M_DS_Crystal_Cladding.Name[0] = Aluminium
+M_DS_Crystal_Cladding.MatRelWeight[0] = 1
+
+
+// Reflector
+DS_nCrystalReflectorElements = 2
+DS_RoCrystalReflector = 3.58
+DS_ZCrystalReflector[0] = 8
+DS_FractionsCrystalReflector[0] = 0.396964
+DS_ZCrystalReflector[1] = 12
+DS_FractionsCrystalReflector[1] = 0.603036
+DS_FractionTypeCrystalReflector = MASS
+M_DS_Reflector.MName = MgO
+M_DS_Reflector.Nmaterials = 1
+M_DS_Reflector.Name[0] = MgO
+M_DS_Reflector.MatRelWeight[0] = 1
+
+
+// DetectorPackaging
+DS_nDetectorPackagingElements = 5
+DS_RoDetectorPackaging = 0.016
+DS_ZDetectorPackaging[0] = 1
+DS_FractionsDetectorPackaging[0] = 0.43
+DS_ZDetectorPackaging[1] = 5
+DS_FractionsDetectorPackaging[1] = 0.032
+DS_ZDetectorPackaging[2] = 6
+DS_FractionsDetectorPackaging[2] = 0.417
+DS_ZDetectorPackaging[3] = 8
+DS_FractionsDetectorPackaging[3] = 0.069
+DS_ZDetectorPackaging[4] = 17
+DS_FractionsDetectorPackaging[4] = 0.052
+DS_FractionTypeDetectorPackaging = MASS
+M_DS_DetectorPackaging.MName = Foam plastic
+M_DS_DetectorPackaging.Nmaterials = 1
+M_DS_DetectorPackaging.Name[0] = Foam plastic
+M_DS_DetectorPackaging.MatRelWeight[0] = 1
+
+
+// DetectorCap
+DS_nDetectorCapElements = 1
+DS_RoDetectorCap = 2.7
+DS_ZDetectorCap[0] = 13
+DS_FractionsDetectorCap[0] = 1
+DS_FractionTypeDetectorCap = MASS
+M_DS_DetectorCap.MName = Aluminium
+M_DS_DetectorCap.Nmaterials = 1
+M_DS_DetectorCap.Name[0] = Aluminium
+M_DS_DetectorCap.MatRelWeight[0] = 1
+

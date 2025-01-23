@@ -1,0 +1,47 @@
+# convert to tsv
+- type: EfrFromEfaOperation
+  input_filename: LaBr25x25.efa
+  # section_name: "[LaBr(25x25);Точечная-15см]"
+  output_filename: res/tmp.efr
+  energy_grid: {start: 50, end: 2000, points: 10, is_log: true}
+- type: EfrToTsvOperation
+  input_filename: res/tmp.efr
+  output_filename: res/LaBr25x25_point15cm.tsv
+
+# run characterisation
+- type: DetectorInitCharacterisationOperation
+  input_in_filename: LaBr25x25.din
+  input_tsv_filename: res/LaBr25x25_point15cm.tsv
+  input_matrix_file: coeffs_scintil_labr_15cm.json
+  output_filename: res/LaBr25x25_optimized.din
+  detector_type: SCINTIL
+
+# run calc with new params
+- type: MergeFilesOperation
+  input_filenames:
+    - res/LaBr25x25_optimized.din
+    - point_15cm.sin
+    - calculation_parameters.in
+  output_filename: res/tccfcalc_optimized.in
+  write_eol_between_files: true
+- type: EffCalcOperation
+  input_filename: res/tccfcalc_optimized.in
+  output_filename: res/tccfcalc_optimized.out
+  histories: 40000 # 10000
+- type: EffCalcOutToTsvOperation
+  input_filename: res/tccfcalc_optimized.out
+  output_filename: res/tccfcalc_optimized.tsv
+
+# compate efficiencies and print results
+- type: TsvRenameColumnsOperation
+  input_filename: res/LaBr25x25_point15cm.tsv
+  output_filename: res/LaBr25x25_point15cm_renamed.tsv
+  columns_from: [efficiency, defficiency]
+  columns_to: [Eff, "dEff(%)"]
+- type: CalcMaxDiffBetweenTwoColumns
+  input_filename_1: res/LaBr25x25_point15cm_renamed.tsv
+  input_filename_2: res/tccfcalc_optimized.tsv
+  column_name: Eff
+  output_filename: res/diff.txt
+- type: PrintFileContent
+  input_filename: res/diff.txt

@@ -42,6 +42,8 @@ def _get_volume(cell: tp.Optional[JsonObject]) -> tp.Optional[int]:
     if not cell:
         return None
     shape = cell["Shape"]
+    if shape == "Point":
+        return None
     dims = cell["Dimensions"]
     if shape in ("CylZ", "CylX", "CylY"):
         h = dims["Dim1"]
@@ -72,7 +74,9 @@ def _convert_material_to_lsrm(material: JsonObject) -> JsonObject:
 def _get_material(cell: tp.Optional[tp.Dict[str, tp.Any]]) -> str:
     if not cell:
         return NOT_ESSENTIAL
-    material = cell["Material"]
+    material = cell.get("Material")
+    if not material:
+        return NOT_ESSENTIAL
     material_lsrm = _convert_material_to_lsrm(material)
     return json.dumps(material_lsrm)
 
@@ -80,7 +84,10 @@ def _get_material(cell: tp.Optional[tp.Dict[str, tp.Any]]) -> str:
 def _get_rho(cell : tp.Optional[JsonObject]) -> tp.Optional[float]:
     if not cell:
         return None
-    return cell["Material"]["rho"]
+    material = cell.get("Material")
+    if not material:
+        return NOT_ESSENTIAL
+    return material["rho"]
 
 
 def _get_det_geom_params_from_physspec_input(

@@ -24,10 +24,18 @@ def _read_row(input_filename: str, pivot_value: float) -> tp.List[float]:
 
 def _reduce_tsv_by_value(input_filenames: tp.List[str], output_filename: str,
                          new_axis_name: str, new_axes_values: tp.List[float],
-                         pivot_value: float):
+                         pivot_value: float, skip_absent_rows: bool):
     header = [new_axis_name] + _read_header(input_filenames[0])
     new_data = []
     for input_filename, new_value in zip(input_filenames, new_axes_values):
+        row = _read_row(input_filename, pivot_value)
+        if not row:
+            error_line = f"There is no row for value {pivot_value} in file: {input_filename}"
+            if skip_absent_rows:
+                print(error_line)
+                continue
+            else:
+                raise Exception(error_line)
         new_data.append([new_value] + _read_row(input_filename, pivot_value))
 
     # save new data to output
@@ -57,6 +65,7 @@ class ReduceTsvByValueOperation:
         self.new_axis_name = "name"
         self.new_axis_values = []
         self.col1value_pivot = 0.0
+        self.skip_absent_rows = False
 
     @staticmethod
     def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> (
@@ -70,10 +79,11 @@ class ReduceTsvByValueOperation:
         op.new_axis_values = section["new_axis_values"]
         assert len(op.input_filenames) == len(op.new_axis_values)
         op.col1value_pivot = section.get('col1value_pivot', op.col1value_pivot)
+        op.skip_absent_rows = section.get('skip_absent_rows', op.skip_absent_rows)
         return op
 
     def run(self) -> None:
         print('start reduce_tsv_by_value')
         _reduce_tsv_by_value(self.input_filenames, self.output_filename,
                              self.new_axis_name, self.new_axis_values,
-                             self.col1value_pivot)
+                             self.col1value_pivot, self.skip_absent_rows)

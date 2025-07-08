@@ -99,8 +99,21 @@ def _get_old_angles(x: float, y: float, z: float) -> tp.Tuple[float, float]:
     return theta_rot, phi_rot
 
 
+def _convert_angles_to_old(theta: float, phi: float) -> tp.Tuple[float, float]:
+    cos_theta = np.cos(theta)
+    sin_theta = np.sin(theta)
+    cos_phi = np.cos(phi)
+    # sin_phi = np.sin(phi)
+    cos_theta_1 = cos_theta * cos_phi
+    sin_theta_1 = np.sin(np.acos(cos_theta_1))
+    cos_phi_1 = sin_theta / sin_theta_1 if sin_theta_1 != 0 else 1
+
+    return np.acos(cos_theta_1), np.acos(cos_phi_1)
+
+
 def _sets_det_coordinate(input_filename: str, distance: float, x_shift: float, z_shift,
-                         output_filename: str, indent: bool = False, set_angles: bool = False):
+                         output_filename: str, indent: bool = False, set_angles: bool = False,
+                         is_old_angles: bool = False):
     with open(input_filename) as f:
         data = json.load(f)
 
@@ -120,9 +133,15 @@ def _sets_det_coordinate(input_filename: str, distance: float, x_shift: float, z
     # set angles to output file
     if set_angles:
         theta, phi, psi = _get_angles(x_shift, det_y_coord, z_shift)
-        data["ContainerSource"]["DetectorPosition"]["detTheta"] = theta
-        data["ContainerSource"]["DetectorPosition"]["detPhi"] = phi
-        data["ContainerSource"]["DetectorPosition"]["detPsi"] = psi
+        if is_old_angles:
+            theta_old, phi_old = _convert_angles_to_old(theta, phi)
+            data["ContainerSource"]["DetectorPosition"]["detTheta"] = theta_old
+            data["ContainerSource"]["DetectorPosition"]["detPhi"] = phi_old
+        else:
+            data["ContainerSource"]["DetectorPosition"]["detTheta"] = theta
+            data["ContainerSource"]["DetectorPosition"]["detPhi"] = phi
+            data["ContainerSource"]["DetectorPosition"]["detPsi"] = psi
+
 
     indent = 4 if indent else None
     with open(output_filename, 'w') as g:
@@ -151,6 +170,7 @@ class SetEffMakerDistanceOperation:
         self.detector_zshift = 0.0
         self.to_indent_output = False
         self.set_angles = False
+        self.is_old_angles = False
 
     @staticmethod
     def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> (
@@ -163,10 +183,11 @@ class SetEffMakerDistanceOperation:
         op.detector_zshift = section.get('detector_zshift', op.detector_zshift)
         op.to_indent_output = section.get('to_indent_output', op.to_indent_output)
         op.set_angles = section.get('set_angles', op.set_angles)
+        op.is_old_angles = section.get('is_old_angles', op.is_old_angles)
         return op
 
     def run(self) -> None:
         print('start set effmaker distance')
         _sets_det_coordinate(self.input_filename, self.distance, self.detector_xshift,
                              self.detector_zshift, self.output_filename, self.to_indent_output,
-                             self.set_angles)
+                             self.set_angles, self.is_old_angles)

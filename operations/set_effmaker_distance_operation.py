@@ -6,34 +6,16 @@ import typing as tp
 import numpy as np
 
 from operations.operation_registry import register_operation
+from .common_code.physspec_distance_calculation import (
+    calc_distance_from_cap_to_crystal_center,
+    calc_source_half_width,
+)
 
 
 EPSILON = 1e-6
 
 
-def _calc_distance_from_cap_to_crystal_center(
-        det_data: tp.Dict[str, tp.Any]) -> float:
-    geom = det_data["Geometry"]
-    if det_data["Type"].upper() == "COAXIAL":
-        return (
-            geom["CrystalHeight"] / 2 +
-            geom["CapToCrystalDistance"] +
-            geom["DetectorCapFrontThickness"])
-    elif det_data["Type"].upper() == "SCINTILLATOR":
-        return (
-            geom["CrystalHeight"] / 2 +
-            geom["CrystalFrontReflectorThickness"] +
-            geom["CrystalFrontCladdingThickness"] +
-            geom["DetectorFrontPackagingThickness"] +
-            geom["DetectorFrontCapThickness"]
-        )
-    elif det_data["Type"].upper() == "COAX_WELL":
-        raise RuntimeError("COAX_WELL cannot be used with EffMaker")
-    else:
-        raise RuntimeError(f"unrealized operation for detector type: {det_data['Type']}")
-
-
-def _calc_source_half_width(source_data: tp.Dict[str, tp.Any]) -> float:
+def calc_source_half_width(source_data: tp.Dict[str, tp.Any]) -> float:
     outer_cell = source_data["Cells"][0]
     if outer_cell["Shape"] == "Point":
         return 0
@@ -118,10 +100,10 @@ def _sets_det_coordinate(input_filename: str, distance: float, x_shift: float, z
         data = json.load(f)
 
     # det height
-    det_center = _calc_distance_from_cap_to_crystal_center(data["Detector"])
+    det_center = calc_distance_from_cap_to_crystal_center(data["Detector"])
 
     # source width
-    source_width = _calc_source_half_width(data["ContainerSource"])
+    source_width = calc_source_half_width(data["ContainerSource"])
 
     det_y_coord = source_width + distance + det_center
 

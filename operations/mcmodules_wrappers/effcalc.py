@@ -41,6 +41,8 @@ def calculate_eff(nuclide: Nuclide, N_thsnds: int, is_calc_spectrum: bool, seed:
             sys.exit()
         logging.info('Spectrum calculation done')
 
+    del lib
+
 
 def calculate_eff_json(N_thsnds: int, is_calc_spectrum: bool, seed: int, activity: float,
                        batch_size: int = 1000):
@@ -59,7 +61,6 @@ def calculate_eff_json(N_thsnds: int, is_calc_spectrum: bool, seed: int, activit
     logging.info(f'Starting calculation with N = {N_thsnds} thsnds')
     percent = 0
     steps = N_thsnds * 1000 // batch_size
-    steps = N // batch_size
     for i in range(steps):
         lib.tccfcalc_calculate(batch_size)
         new_percent = int(10 * i / steps)
@@ -75,6 +76,8 @@ def calculate_eff_json(N_thsnds: int, is_calc_spectrum: bool, seed: int, activit
             logging.error('Spectrum calculation error #' + str(error_num))
             sys.exit()
         logging.info('Spectrum calculation done')
+
+    del lib
 
 
 def main():

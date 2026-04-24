@@ -21,7 +21,8 @@ def _load_eff_from_tsv(filename: str) -> tp.Optional[tp.List[float]]:
 
 def _load_coeffs(filename: str) -> np.ndarray:
     with open(filename) as f:
-        a = json.load(f)
+        data = json.load(f)
+        a = data["coeffs"]
     return np.array(a)
 
 

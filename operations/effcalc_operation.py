@@ -3,7 +3,7 @@ import shutil
 import typing as tp
 
 from operations.operation_registry import register_operation
-from .mcmodules_wrappers.effcalc import calculate_eff
+from .mcmodules_wrappers.effcalc import calculate_eff, calculate_eff_json
 from .mcmodules_wrappers.nuclide import Nuclide
 
 
@@ -28,6 +28,8 @@ class EffCalcOperation:
         self.nuclide: Nuclide = Nuclide.get_default()
         self.seed = 0
         self.activity = 1000.0
+        self.is_calc_spectrum = False
+        self.output_spe_name = "test_spectr.spe"
         self.batch_size = -1
 
     @staticmethod
@@ -43,15 +45,25 @@ class EffCalcOperation:
             op.nuclide = Nuclide.parse_from(nuclide_str)
         op.seed = section.get('seed', op.seed)
         op.activity = section.get('activity', op.activity)
+        op.is_calc_spectrum = section.get('is_calc_spectrum', op.is_calc_spectrum)
+        op.output_spe_name = os.path.join(project_dir,
+                                          section.get('output_spe_name', op.output_spe_name))
         op.batch_size = section.get('batch_size', op.histories
                                     if op.batch_size < 0 else op.batch_size)
         return op
 
     def run(self) -> None:
         print('start effcalc')
-        # copy input -> tccfcalc.in
-        shutil.copy(self.input_filename, 'tccfcalc.in')
         # run effcalc
-        calculate_eff(self.nuclide, self.histories, False, self.seed, self.activity)
+        if self.input_filename.endswith(".in"):
+            shutil.copy(self.input_filename, 'tccfcalc.in')
+            calculate_eff(self.nuclide, self.histories, self.is_calc_spectrum, self.seed, self.activity)
+        elif self.input_filename.endswith(".json"):
+            shutil.copy(self.input_filename, 'tccfcalc_input.json')
+            calculate_eff_json(self.histories, self.is_calc_spectrum, self.seed, self.activity)
+        else:
+            raise Exception("unknown input file extension")
         # copy tccfcalc.out -> output
         shutil.copy('tccfcalc.out', self.output_filename)
+        if self.is_calc_spectrum:
+            shutil.copy('test_spectr.spe', self.output_spe_name)

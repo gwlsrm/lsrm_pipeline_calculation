@@ -10,21 +10,17 @@ EPS = 1e-15
 NOT_ESSENTIAL = "not essential"
 JsonObject = tp.Dict[str, tp.Any]
 
-def _parse_tsv_output(filename: str) -> tp.Dict[str, tp.List[float]]:
-    header_names = None
-    res: tp.Dict[str, tp.List[float]] = {}
+
+def _parse_physspec_output(filename: str) -> tp.Dict[str, tp.List[float]]:
     with open(filename) as f:
-        for line in f:
-            line = line.strip()
-            if header_names is None:
-                header_names = [w for w in line.split('\t')]
-                continue
-            tokens = [float(w) for w in line.split('\t')]
-            assert len(tokens) == len(header_names)
-            for name, value in zip(header_names, tokens):
-                res.setdefault(name, [])
-                res[name].append(value)
-    return res
+        data = json.load(f)
+    data = data["StraightCalculationResults"]["Peaks"]
+    result = {
+        name: data[name]
+        for name in ["energy", "intensity", "count_rate", "efficiency", "defficiency"]
+    }
+
+    return result
 
 
 def _find_cell_with_source(data: JsonObject) -> tp.Optional[JsonObject]:
@@ -129,16 +125,16 @@ def _save_to_efr(eff_result: tp.Dict[str, tp.List[float]],
             e = eff_result["energy"][i]
             eff = eff_result["efficiency"][i]
             eff = max(eff, EPS)
-            deff_rel = eff_result["defficiency"][i] / eff * 100
+            deff_rel = eff_result["defficiency"][i] * 100
             intensity = eff_result["intensity"][i]
             cr = eff_result["count_rate"][i]
             f.write(f"{e*1000}={eff},{deff_rel},Nuclide,{cr},1,{intensity}\n")
 
 
 @register_operation
-class AppspecTsvOutputToEfr:
+class PhysspecOutputToEfrOperation:
     """
-    AppspecTsvOutputToEfr converts appspec output tsv-file to efr-file
+    PhysspecOutputToEfrOperation converts physspec output json-file to efr-file
     All needed information like detector_name, geometry_name, volume, material, rho
     it can take from physspec_input_filename or you can pass them directly in operation parameters.
     distance can be set only directly through operation parameters
@@ -157,8 +153,8 @@ class AppspecTsvOutputToEfr:
         self.other_params = {}
 
     @staticmethod
-    def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'AppspecTsvOutputToEfr':
-        op = AppspecTsvOutputToEfr()
+    def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'PhysspecOutputToEfrOperation':
+        op = PhysspecOutputToEfrOperation()
         op.input_filename = os.path.join(project_dir, section['input_filename'])
         op.output_filename = os.path.join(project_dir, section['output_filename'])
         op.physspec_input_filename = os.path.join(project_dir, section['physspec_input_filename'])
@@ -172,8 +168,8 @@ class AppspecTsvOutputToEfr:
         return op
 
     def run(self) -> None:
-        print('start appspec_tsv_output_to_efr')
-        eff_result = _parse_tsv_output(self.input_filename)
+        print('start physspec_output_to_efr')
+        eff_result = _parse_physspec_output(self.input_filename)
         if self.physspec_input_filename:
             det_name, geom_name, volume, material, density = _get_det_geom_params_from_physspec_input(
                 self.physspec_input_filename)

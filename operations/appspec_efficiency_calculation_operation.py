@@ -7,9 +7,9 @@ from .mcmodules_wrappers.appspec import calc_efficiency
 
 
 @register_operation
-class AppspecOperation:
+class AppspecEfficiencyOperation:
     """
-    AppspecOperation calculates efficiency from physspec using appspec.dll(.so)
+    AppspecEfficiencyOperation calculates efficiency from physspec using appspec.dll(.so)
     parameters:
         - input_filename: input filename for calculation
             (use AppspecEfficiencyInputOperation to create it)
@@ -22,8 +22,8 @@ class AppspecOperation:
         self.is_log = False
 
     @staticmethod
-    def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'AppspecOperation':
-        op = AppspecOperation()
+    def parse_from_yaml(section: tp.Dict[str, tp.Any], project_dir: str) -> 'AppspecEfficiencyOperation':
+        op = AppspecEfficiencyOperation()
         op.input_filename = os.path.join(project_dir,
                                          section.get('input_filename', op.input_filename))
         op.output_filename = os.path.join(project_dir,
@@ -32,7 +32,7 @@ class AppspecOperation:
         return op
 
     def run(self) -> None:
-        print('start appspec calculation')
+        print('start appspec_efficiency calculation')
         # copy input -> appspec_input.json
         if self.input_filename != 'appspec_input.json':
             shutil.copy(self.input_filename, 'appspec_input.json')

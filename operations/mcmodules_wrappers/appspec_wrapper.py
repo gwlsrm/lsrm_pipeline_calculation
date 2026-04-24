@@ -63,6 +63,11 @@ class AppspecDllWrapper:
         self._calc_apparatus_spectrum = _get_attribute(
             self._lib, ['calc_apparatus_spectrum@4', 'calc_apparatus_spectrum'])
         self._calc_apparatus_spectrum.argtypes = [ct.c_char_p]
+        # make spectrum from straight
+        self._make_apparatus_spectrum = _get_attribute(
+            self._lib, ['make_apparatus_spectrum@8', 'make_apparatus_spectrum'])
+        self._make_apparatus_spectrum.argtypes = [ct.c_char_p, ct.c_char_p]
+
 
     @staticmethod
     def _auto_select_lib_name(path_to_dll: str):
@@ -95,6 +100,10 @@ class AppspecDllWrapper:
 
     def calc_apparatus_spectrum(self, input_filename: str) -> int:
         return self._calc_apparatus_spectrum(bytes(input_filename, 'utf-8'))
+
+    def make_apparatus_spectrum(self, input_filename: str, output_filename: str) -> int:
+        return self._make_apparatus_spectrum(bytes(input_filename, 'utf-8'),
+                                             bytes(output_filename, 'utf-8'))
 
     def calculate_efficiency_json(self, input_filename: str, output_filename: str,
                                   is_log: bool) -> int:

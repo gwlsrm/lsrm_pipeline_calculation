@@ -16,6 +16,8 @@ def _edit_jsonfile(infile_name: str, outfile_name: str, params: tp.Dict[str, tp.
             key_fields = [key]
         d = data
         for i, k in enumerate(key_fields):
+            if isinstance(d, list):
+                k = int(k)
             if i+1 != len(key_fields):
                 d = d[k]
             else:

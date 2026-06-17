@@ -2,7 +2,7 @@
     Parse lsrm in-files
 """
 
-from .config_parser import ConfigFileParser
+from ..common_parsers.config_parser import ConfigFileParser
 from .constants import *
 
 

@@ -1,0 +1,23 @@
+# from efa -> tsv
+- type: EfrFromEfaOperation
+  input_filename: GEM15P4.efa
+  section_name: "[GEM15P4-70 #51-TP32799B;Point-25cm-1]"
+  output_filename: res/tmp.efr
+  energy_grid: {start: 50, end: 2000, points: 10, is_log: true}
+- type: EfrToTsvOperation
+  input_filename: res/tmp.efr
+  output_filename: res/GEM15P4_point25cm.tsv
+
+# make 2pi efficiency
+- type: ExtendedObjectEfficiencyOperation
+  input_filename: res/GEM15P4_point25cm.tsv
+  output_filename: res/GEM15P4_point25cm_2pi.tsv
+  distance: 25
+  material: H2O1
+
+# tsv -> efr
+- type: EfrUpdateFromTsvOperation
+  efr_filename: res/tmp.efr
+  tsv_filename: res/GEM15P4_point25cm_2pi.tsv
+  columns: [energy, efficiency, defficiency]
+  output_filename: res/GEM15P4_point25cm_2pi.efr

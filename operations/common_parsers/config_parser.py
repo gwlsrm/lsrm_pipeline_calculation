@@ -5,14 +5,15 @@ class ConfigFileParser:
     def __init__(self, filename, sep='='):
         self.data = {}
         self.filename = filename
+        self.sep = sep
         with open(filename) as f:
             for line in f:
                 line = line.strip()
                 if not line: continue
                 if ConfigFileParser.is_comment(line): continue
-                words = [word.strip() for word in line.split('=')]
+                words = [word.strip() for word in line.split(sep)]
                 if len(words) < 2: continue
-                self.data[words[0]] = '='.join(words[1:])
+                self.data[words[0]] = sep.join(words[1:])
 
     def get_dict(self):
         return self.data
@@ -28,6 +29,11 @@ class ConfigFileParser:
 
     def __contains__(self, key):
         return key in self.data
+
+    def save(self, filename: str):
+        with open(filename, 'w') as f:
+            for name, value in self.data.items():
+                f.write(f"{name}{self.sep}{value}\n")
 
     @staticmethod
     def is_comment(line):

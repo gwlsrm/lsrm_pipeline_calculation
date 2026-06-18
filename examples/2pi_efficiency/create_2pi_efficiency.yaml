@@ -13,7 +13,8 @@
   input_filename: res/GEM15P4_point25cm.tsv
   output_filename: res/GEM15P4_point25cm_2pi.tsv
   distance: 25
-  material: H2O1
+  # material_formula: H2O1
+  material_json: '{"name": "water", "rho": 1.0, "elements": [{"z": 1, "frac": 0.11}, {"z": 8, "frac": 0.89}]}'
 
 # tsv -> efr
 - type: EfrUpdateFromTsvOperation

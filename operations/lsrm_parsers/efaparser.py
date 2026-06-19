@@ -165,7 +165,10 @@ class Efficiency:
             nuclides.add(p.nuclide)
         return list(nuclides)
 
-    def get_eff(self, energy: float) -> tp.Tuple[float]:
+    def get_eff(self, energy: float) -> tp.Tuple[float, float]:
+        """
+        return efficiency, defficiency (in part of 1 -- need to check)
+        """
         assert energy > 0
         assert len(self.zones) > 0
         energy = math.log10(energy)

@@ -32,7 +32,7 @@ def _convert_to_efr(efficiency: efaparser.Efficiency,
     eff_points = []
     for e in energy_points:
         eff, deff = efficiency.get_eff(e)
-        eff_points.append(efaparser.EffPoint(e, eff, deff, "nuclide", 100, 1, 1))
+        eff_points.append(efaparser.EffPoint(e, eff, deff*100, "nuclide", 100, 1, 1))
     efficiency.points = eff_points
     efficiency.convert_records_to_efr("nuclide")
     return efficiency

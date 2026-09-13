@@ -53,6 +53,5 @@ class EditJsonOperation:
         return op
 
     def run(self) -> None:
-        print('start edit_json_params')
         params = {r['name']: r['value'] for r in self.edit_params}
         _edit_jsonfile(self.input_filename, self.output_filename, params, self.to_indent_output)

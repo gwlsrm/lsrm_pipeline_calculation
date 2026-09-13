@@ -172,7 +172,6 @@ class AppspecTsvOutputToEfr:
         return op
 
     def run(self) -> None:
-        print('start appspec_tsv_output_to_efr')
         eff_result = _parse_tsv_output(self.input_filename)
         if self.physspec_input_filename:
             det_name, geom_name, volume, material, density = _get_det_geom_params_from_physspec_input(

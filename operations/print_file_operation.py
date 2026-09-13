@@ -19,7 +19,6 @@ class PrintFileContent:
         return op
 
     def run(self) -> None:
-        print('start print file')
         with open(self.input_filename) as f:
             for line in f:
                 print(line, end='')

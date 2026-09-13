@@ -91,7 +91,6 @@ class AppspecEfficiencyInputOperation:
         return op
 
     def run(self) -> None:
-        print('start apspec_efficiency_prepare')
         # get energies, nfep, dfep from response
         resp_energies, resp_nfep, resp_dfep = _parse_response_output(self.input_response_filename)
         # get energies, crs, intensities from physspec_output

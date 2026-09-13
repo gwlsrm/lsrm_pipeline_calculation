@@ -101,3 +101,15 @@ def save_rows_to_tsv(output_filename: str, header: tp.List[str], rows: tp.List[t
         for row in rows:
             f.write("\t".join(row))
             f.write("\n")
+
+
+def save_cols_to_tsv(output_filename: str, cols: tp.Dict[str, tp.List[tp.Any]]):
+    header = list(cols.keys())
+    assert all(len(cols[name]) == len(cols[header[0]]) for name in header)
+    n_rows = len(cols[header[0]])
+    with open(output_filename, 'w') as f:
+        f.write("\t".join(header))
+        f.write("\n")
+        for i in range(n_rows):
+            f.write("\t".join(str(cols[name][i]) for name in header))
+            f.write("\n")

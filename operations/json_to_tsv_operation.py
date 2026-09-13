@@ -66,5 +66,4 @@ class JsonToTsvOperation:
         return op
 
     def run(self) -> None:
-        print('start jsont_to_tsv')
         _convert_json_to_tsv(self.input_filename, self.output_filename, self.column_names)

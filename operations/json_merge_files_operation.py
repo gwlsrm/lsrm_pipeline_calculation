@@ -44,5 +44,4 @@ class JsonMergeFilesOperation:
         return op
 
     def run(self) -> None:
-        print('start json_merge_files operation')
         _merge_jsonfiles(self.input_filenames, self.output_filename, self.to_indent_output)

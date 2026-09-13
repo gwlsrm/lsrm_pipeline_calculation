@@ -73,7 +73,6 @@ class EfrFromEfaOperation:
         return op
 
     def run(self) -> None:
-        print('start efr_from_efa operation')
         efficiency = _get_efa(self.input_filename, self.section_name)
         if self.energy_points is None:
             self.energy_points = [p.energy for p in efficiency.points]

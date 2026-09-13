@@ -12,6 +12,7 @@ class Graph:
 
     def run(self) -> None:
         for operation in self.operations:
+            print(f"start {type(operation).__name__} operation")
             operation.run()
 
 

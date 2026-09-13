@@ -59,7 +59,6 @@ class AppspecConvertcr2spectrumOpertation:
         return op
 
     def run(self) -> None:
-        print('start appspec_convertcr2spectrum operation')
         create_spectrum(
             self.input_appspec_spectrum_filename,
             self.input_physspec_out_filename,

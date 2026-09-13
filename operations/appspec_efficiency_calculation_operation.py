@@ -32,7 +32,6 @@ class AppspecEfficiencyOperation:
         return op
 
     def run(self) -> None:
-        print('start appspec_efficiency calculation')
         # copy input -> appspec_input.json
         if self.input_filename != 'appspec_input.json':
             shutil.copy(self.input_filename, 'appspec_input.json')

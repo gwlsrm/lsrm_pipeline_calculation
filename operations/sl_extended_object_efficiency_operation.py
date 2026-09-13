@@ -23,10 +23,24 @@ def _load_mu(material: Material, energies: np.ndarray) -> np.ndarray:
 
 
 def calculate_extended_object_efficiency(
-        energies: np.ndarray, point_efficiency: np.ndarray, distance: float, material: Material
+        energies: np.ndarray, point_efficiency: np.ndarray, distance: float, material: Material,
+        rho: float = 0.0, r_det: float = 0.0, r_eff: float = 0.0, is_4pi: bool = False
     ) -> np.ndarray:
+    """
+    r_det -- radius of detector, cm
+    r_eff -- effective center of detector, cm
+    return: special efficiency in kg/(Bq * s)
+    """
     mu = _load_mu(material, energies)
-    return point_efficiency * distance**2 * 2 * np.pi / mu * g2kg
+    k_geom = 4 if is_4pi else 2
+    k_not_ideal_det = 1
+    # if rho != 0.0:
+    #     x = mu * rho * r_det
+    #     # k_not_ideal_det = 2 / x**2 * (1 - np.exp(-mu * rho * r_det) * (1 + x))
+    #     # k_not_ideal_det = 1 - 2/3 * x + 1 / 4 * x**2
+    #     k_not_ideal_det = np.exp(-mu * rho * (r_det - r_eff))
+
+    return point_efficiency * (distance + r_eff)**2 * k_geom * np.pi / mu * g2kg * k_not_ideal_det
 
 
 def _save_to_tsv(energies: np.ndarray, efficiency: np.ndarray, defficiency: np.ndarray, output_filename: str):
@@ -55,6 +69,10 @@ class ExtendedObjectEfficiencyOperation:
             e.g. {"name": "water", "rho": 1.0, "elements": [{"z": 1, "frac": 0.11}, {"z": 8, "frac": 0.89}]}
         sl_material_json: str -- material in json-format: {Name: ..., Ro: ..., Compound: [{"z": frac}, ...]}
             e.g. {"Name": "water", "Ro": 1.0, "Compound": [{"1": 0.11}, {"8": 0.89}]}
+        material_density: float -- material density, g/cm^3
+        detector_radius: float -- radius of detector, cm
+        effective_radius: float -- effective radius of detector, cm
+        is_4pi: bool -- is 4pi or 2pi source geometry
         output_filename: str -- specific efficiency tsv-file in kg/(Bq * s)
     """
     def __init__(self):
@@ -63,6 +81,10 @@ class ExtendedObjectEfficiencyOperation:
         self.material_formula = ""
         self.material_json = ""
         self.sl_material_json = ""
+        self.material_density = 0.0
+        self.detector_radius = 0.0
+        self.effective_radius = 0.0
+        self.is_4pi = False
         self.output_filename = ""
 
     @staticmethod
@@ -75,11 +97,14 @@ class ExtendedObjectEfficiencyOperation:
         op.sl_material_json = section.get('sl_material_json', "")
         assert op.material_json or op.material_formula or op.sl_material_json, \
             "need to pass material_formula, material_json or sl_material_json"
+        op.material_density = float(section.get('material_density', 0.0))
+        op.detector_radius = float(section.get('detector_radius', 0.0))
+        op.effective_radius = float(section.get('effective_radius', 0.0))
+        op.is_4pi = bool(section.get('is_4pi', False))
         op.output_filename = os.path.join(project_dir, section['output_filename'])
         return op
 
     def run(self) -> None:
-        print('start extended object efficiency operation')
         energies, point_efficiency, defficiency = _load_point_efficiency(self.input_filename)
         if self.material_formula:
             material = Material.parse_from_formula(self.material_formula)
@@ -87,5 +112,7 @@ class ExtendedObjectEfficiencyOperation:
             material = Material.read_from_json(self.material_json)
         else:
             material = Material.read_from_sl_json(self.sl_material_json)
-        ext_efficiency = calculate_extended_object_efficiency(energies, point_efficiency, self.distance, material)
+        ext_efficiency = calculate_extended_object_efficiency(
+            energies, point_efficiency, self.distance, material, self.material_density, self.detector_radius,
+            self.effective_radius, self.is_4pi)
         _save_to_tsv(energies, ext_efficiency, defficiency, self.output_filename)

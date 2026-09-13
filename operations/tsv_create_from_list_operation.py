@@ -29,5 +29,4 @@ class TsvCreateFromList:
         return op
 
     def run(self) -> None:
-        print('start tsv_create_from_list')
         _create_tsv(self.output_filename, self.row)

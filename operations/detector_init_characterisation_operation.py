@@ -97,8 +97,6 @@ class DetectorInitCharacterisationOperation:
         return op
 
     def run(self) -> None:
-        print('start detector_init_characterisation operation')
-
         param_values = _minimize_det_parameters(self.input_tsv_filename, self.input_matrix_file,
                                           self.input_in_filename, self.detector_type)
         param_names = DETECTOR_TYPE_TO_PARAM_NAMES[self.detector_type]

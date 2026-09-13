@@ -174,3 +174,5 @@ physspec_input.json
 physspec_output.json
 tccfcalc.in
 tccfcalc.out
+*.bin
+*.spe

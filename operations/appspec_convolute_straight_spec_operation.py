@@ -55,6 +55,5 @@ class AppspecConvoluteStraightSpecOperation:
         return op
 
     def run(self) -> None:
-        print('start appspec_convolute_straight_spectrum operation')
         _convolute_spectr(self.physspec_output_filename)
         _save_spectrum_spe(self.output_filename)

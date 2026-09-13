@@ -29,7 +29,6 @@ class PlotEfficiencyOperation:
         return op
 
     def run(self) -> None:
-        print('start plot efficiency operation')
         if self.efficiency_name:
             eff = efaparser.get_eff_by_name(self.input_filename, self.efficiency_name)
         else:

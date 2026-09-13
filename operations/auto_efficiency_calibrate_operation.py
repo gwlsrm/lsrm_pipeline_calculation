@@ -44,7 +44,6 @@ class AutoEfficiencyCalibrationOperation:
         return op
 
     def run(self) -> None:
-        print('start auto_efficiency_calibration')
         efr = efaparser.get_efficiency_from_efa(self.input_filename)
         efa = ec.approx_efr_with_polynomes(efr, self.zones_config)
         efa.save_as_efa(self.output_filename, self.is_append)

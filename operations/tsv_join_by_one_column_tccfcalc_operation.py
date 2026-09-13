@@ -55,6 +55,5 @@ class TsvOneColumnJoinOperation:
         return op
 
     def run(self) -> None:
-        print('start tsv_one_column_join operation')
         data = _parse_tsv_column_format(self.input_filename)
         _add_to_tsv(self.output_filename, self.row_exist_values, data[self.column_name])

@@ -43,6 +43,8 @@ from .set_effmaker_distance_operation import SetEffMakerDistanceOperation  # noq
 from .spe2txt_converter_operation import Spe2TxtOperation  # noqa
 from .sl_extended_object_efficiency_operation import ExtendedObjectEfficiencyOperation  # noqa
 from .tsv_create_from_list_operation import TsvCreateFromList  # noqa
+from .tsv_filter_columns_operation import TsvFilterColumnsOperation  # noqa
 from .tsv_join_by_one_column_tccfcalc_operation import TsvOneColumnJoinOperation  # noqa
+from .tsv_multiply_column_by_number_operation import TsvMultiplyColumnByNumberOperation  # noqa
 from .tsv_rename_columns_operation import TsvRenameColumnsOperation  # noqa
 from .tsv_reduce_function_operations import TsvReduceFunctionOperation  # noqa

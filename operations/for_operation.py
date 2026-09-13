@@ -65,6 +65,6 @@ class ForOperation:
         return op
 
     def run(self) -> None:
-        print('start for')
         for op in self.operations:
+            print(f"start {type(op).__name__} operation")
             op.run()

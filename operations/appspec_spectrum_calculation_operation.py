@@ -30,6 +30,5 @@ class AppspecSpectrumOperation:
         return op
 
     def run(self) -> None:
-        print('start appspec_spectrum calculation')
         # calc efficiency
         calc_spectrum(self.input_filename, self.output_filename)

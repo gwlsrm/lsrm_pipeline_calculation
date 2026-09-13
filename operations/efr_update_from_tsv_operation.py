@@ -56,7 +56,6 @@ class EfrUpdateFromTsvOperation:
         return op
 
     def run(self) -> None:
-        print('start efr_update_from_tsv')
         eff = _parse_efr(self.efr_filename)
         tsv_values = _load_tsv_values(self.tsv_filename, self.columns)
         new_eff = _update_efr(eff, tsv_values)

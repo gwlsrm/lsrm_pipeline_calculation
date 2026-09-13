@@ -164,7 +164,6 @@ class AppspecSpectrumInputOperation:
         return op
 
     def run(self) -> None:
-        print('start apspec_efficiency_prepare')
         response = _parse_response_output(self.input_response_filename)
         physspec_data = _parse_physspec_output_full(self.input_physspec_filename)
         analyzer_data = _read_json_data(self.input_analyzer_filename)

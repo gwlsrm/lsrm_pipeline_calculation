@@ -64,6 +64,5 @@ class PhysspecSetRadSource:
         return op
 
     def run(self) -> None:
-        print('start physspec_set_rad_source')
         _sets_rad_source(self.input_filename, self.cell_number, self.source, self.output_filename,
                          self.is_pretty)

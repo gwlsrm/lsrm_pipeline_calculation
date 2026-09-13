@@ -27,5 +27,4 @@ class CopyFileOperation:
         return op
 
     def run(self) -> None:
-        print('start copy_file operation')
         shutil.copyfile(self.input_filename, self.output_filename)

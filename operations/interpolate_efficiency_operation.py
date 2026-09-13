@@ -138,6 +138,5 @@ class LinearEfficiencyInterpolateOperation:
         return op
 
     def run(self) -> None:
-        print('start linear_efficiency_interpolate')
         _interpolate_efficiency_to_new_distance(self.input_filenames, self.output_filename,
                                                 self.distances, self.target_distance, self.mode)

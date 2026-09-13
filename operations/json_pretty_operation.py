@@ -22,7 +22,6 @@ class JsonPrettyOperation:
         return op
 
     def run(self) -> None:
-        print('start json pretty')
         with open(self.input_filename) as f:
             data = json.load(f)
         with open(self.output_filename, 'w') as g:

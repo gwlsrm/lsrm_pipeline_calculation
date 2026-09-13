@@ -58,7 +58,6 @@ class ForFilesOperation:
         return op
 
     def run(self) -> None:
-        print('start for_files operation')
         for filepath in glob.glob(self.input_filemask):
             if not os.path.isfile(filepath):
                 continue
@@ -66,4 +65,5 @@ class ForFilesOperation:
                 operation_rec = _update_operation(operation_rec, filepath)
                 t = register_operation.registry[operation_rec['type']]
                 operation = t.parse_from_yaml(operation_rec, self.project_dir)
+                print(f"start {type(operation).__name__} operation")
                 operation.run()

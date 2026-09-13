@@ -37,7 +37,6 @@ class EfrAddParametersOperation:
         return op
 
     def run(self) -> None:
-        print('start efr_add_parameter')
         eff = efaparser.get_efficiency_from_efa(self.input_filename)
         for k, v in self.parameters.items():
             eff.header_lines.append((k, str(v)))

@@ -47,7 +47,6 @@ class TsvRenameColumnsOperation:
         return op
 
     def run(self) -> None:
-        print('start tsv_rename_columns operation')
         header, rows = parse_tsv_to_str_rows(self.input_filename)
         header = _rename_header(header, self.columns_from, self.columns_to)
 

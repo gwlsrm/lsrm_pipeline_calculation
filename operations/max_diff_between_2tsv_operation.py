@@ -72,7 +72,6 @@ class CalcMaxDiffBetweenTwoColumns:
         return op
 
     def run(self) -> None:
-        print('start calc max difference')
         _calc_max_diff(self.input_filename_1, self.input_filename_2, self.column_name,
                        self.is_relative_diff, self.relative_to_average,
                        self.output_filename)

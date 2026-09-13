@@ -41,6 +41,5 @@ class PhysspecPrintDistance:
         return op
 
     def run(self) -> None:
-        print('start physspec_print_distance')
         distance = _get_distance_from_coordinates(self.input_filename)
         print("det to source distance:", distance)

@@ -51,6 +51,5 @@ class MergeFilesOperation:
         return op
 
     def run(self) -> None:
-        print('start merge files')
         _merge_files(self.input_filenames, self.output_filename, self.write_filename,
                      self.write_header, self.write_eol_between_files)

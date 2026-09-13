@@ -34,6 +34,5 @@ class EffCalcOutToTsvOperation:
         return op
 
     def run(self) -> None:
-        print('start effcalc_out_to_tsv_operation')
         header, rows = parse_out_file_row_format(self.input_filename)
         _save_tsv(header, rows, self.output_filename)

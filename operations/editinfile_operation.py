@@ -42,6 +42,5 @@ class EditInFileOperation:
         return op
 
     def run(self) -> None:
-        print('start edit_infile_params')
         params = {r['name']: r['value'] for r in self.edit_params}
         _edit_infile(self.input_filename, self.output_filename, params)

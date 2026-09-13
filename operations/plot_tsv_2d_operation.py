@@ -50,7 +50,6 @@ class PlotTsv2dOperation:
         return op
 
     def run(self) -> None:
-        print('start plot 2d operation')
         x, y = _load_cols_from_tsv(self.input_filename, self.x_col_name, self.y_col_name)
         plt.figure()
         if self.x_scale_log:

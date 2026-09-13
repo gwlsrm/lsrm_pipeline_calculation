@@ -67,6 +67,5 @@ class TsvReduceFunctionOperation:
         return op
 
     def run(self) -> None:
-        print('start tsv_reduce_with_function')
         _tsv_reduce_with_function(self.input_filename, self.output_filename,
                              self.column_name, self.function)

@@ -29,7 +29,6 @@ class PhysspecOperation:
         return op
 
     def run(self) -> None:
-        print('start physspec calculation')
         # copy input -> physspec_input.json
         if self.input_filename != 'physspec_input.json':
             shutil.copy(self.input_filename, 'physspec_input.json')

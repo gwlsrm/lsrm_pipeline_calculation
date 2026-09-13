@@ -83,7 +83,6 @@ class ReduceTsvByValueOperation:
         return op
 
     def run(self) -> None:
-        print('start reduce_tsv_by_value')
         _reduce_tsv_by_value(self.input_filenames, self.output_filename,
                              self.new_axis_name, self.new_axis_values,
                              self.col1value_pivot, self.skip_absent_rows)

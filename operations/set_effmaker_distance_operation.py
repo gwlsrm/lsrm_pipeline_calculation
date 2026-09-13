@@ -169,7 +169,6 @@ class SetEffMakerDistanceOperation:
         return op
 
     def run(self) -> None:
-        print('start set effmaker distance')
         _sets_det_coordinate(self.input_filename, self.distance, self.detector_xshift,
                              self.detector_zshift, self.output_filename, self.to_indent_output,
                              self.set_angles, self.is_old_angles)

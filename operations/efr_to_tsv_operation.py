@@ -49,7 +49,6 @@ class EfrToTsvOperation:
         return op
 
     def run(self) -> None:
-        print('start efr_to_tsv')
         eff_points = _parse_efr_output(self.input_filename)
 
         _save_to_tsv(eff_points, self.output_filename)

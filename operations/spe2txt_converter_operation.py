@@ -38,7 +38,6 @@ class Spe2TxtOperation:
         return op
 
     def run(self) -> None:
-        print('start spe2txt_converter operation')
         print('converting:', self.input_filename)
         spectrum = SpectrumReader().parse_spe(self.input_filename)
         save_spectrum_as_txt(spectrum, self.output_filename, self.save_additional_fields)
